@@ -1,26 +1,65 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace CodeCrackerTests
 {
     [TestFixture]
     public class CodeCrackerTest
     {
-        //a b c d e f g h i j k l m n o p q r s t u v w x y z
-        // ! ) " ( £ * % & > < @ a b c d e f g h i j k l m n o
+        [SetUp]
+        public void SetUp()
+        {
+            _codeCracker = new CodeCracker();
+        }
+
+        private static CodeCracker _codeCracker;
 
         [Test]
         public static void ShouldEncrypt_AToExclamation()
         {
-            Assert.True(true);
+            var encrypted = _codeCracker.Encrypt("a");
+            Assert.AreEqual("!", encrypted);
         }
-    }
 
-
-    public class CodeCracker
-    {
-        public static string Encrypt(string s)
+        [Test]
+        public static void ShouldEncrypt_BToParenthese()
         {
-            return null;
+            var encrypted = _codeCracker.Encrypt("b");
+            Assert.AreEqual(")", encrypted);
+        }
+
+        [Test]
+        public static void ShouldEncrypt_CToDoubleQuote()
+        {
+            var encrypted = _codeCracker.Encrypt("c");
+            Assert.AreEqual("\"", encrypted);
+        }
+
+        [Test]
+        public static void ShouldEncrypt_DoubleQuoteToC()
+        {
+            var encrypted = _codeCracker.Decrypt("\"");
+            Assert.AreEqual("c", encrypted);
+        }
+
+        [Test]
+        public static void ShouldEncrypt_lmnoTowxyz()
+        {
+            var encrypted = _codeCracker.Decrypt("lmno");
+            Assert.AreEqual("wxyz", encrypted);
+        }
+
+        [Test]
+        public static void ShouldDecrypt_wxyzTolmno()
+        {
+            var encrypted = _codeCracker.Encrypt("wxyz");
+            Assert.AreEqual("lmno", encrypted);
+        }
+
+        [Test]
+        public static void ShouldEncrypt_nullToException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _codeCracker.Decrypt(null));
         }
     }
 }
